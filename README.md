@@ -1,18 +1,14 @@
 
-## Official Liquibase Docker images
+## Liquibase Docker images
 
-[![Docker Auto Build](https://img.shields.io/docker/cloud/automated/liquibase/liquibase)][docker]
-
-[docker]: https://hub.docker.com/r/liquibase/liquibase
-
-This is the official repository for [Liquibase Command-line](https://download.liquibase.org/) images.
+This is forked from official [liquibase-docker](https://github.com/liquibase/docker) repository.
 
 # Supported Tags
 
-The following tags are officially supported:
+The following tags are supported:
 
--	[`latest` (*Dockerfile*)](https://github.com/liquibase/docker/blob/main/Dockerfile)
--	[`3.10.x` (*3.10.x/Dockerfile*)](https://github.com/liquibase/docker/blob/main/3.10.x/Dockerfile)
+-	`4.0.0-all`, `4.0.0-postgres`, `4.0.0-mysql`
+-	`4.1.0-all`, `4.1.0-postgres`, `4.1.0-mysql`
 
 ## Examples
 
