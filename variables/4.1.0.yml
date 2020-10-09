@@ -1,0 +1,3 @@
+liquibase:
+  version: 4.1.0
+  sha: a77df3776757ff52f798fad82456bbad72c901d42736eb75863691b58296c7bb
