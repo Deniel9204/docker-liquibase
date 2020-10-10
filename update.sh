@@ -13,7 +13,7 @@ variants=(
     all
 )
 
-min_version='3.0'
+min_version='3.8'
 
 # version_greater_or_equal A B returns whether A >= B
 function version_greater_or_equal() {
