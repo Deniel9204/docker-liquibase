@@ -37,8 +37,8 @@ for version in "${versions[@]}"; do
             
             for tagAlias in "${tagAliases[@]}"; do
                 echo "$tagAlias"
-                docker tag $image:$version-$variant $image:$tagAlias
-                docker push $image:$tagAlias
+                docker tag $image:$version-$variant $tagAlias
+                docker push $tagAlias
             done
 
         done
