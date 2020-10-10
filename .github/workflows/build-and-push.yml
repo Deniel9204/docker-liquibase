@@ -1,0 +1,22 @@
+name: ci
+
+on:
+  workflow_run:
+    workflows: ["update.sh"]
+    branches: [main]
+    types: 
+      - completed
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - uses: actions/checkout@v2
+      - name: Run update.sh script
+        run: ./publish.sh

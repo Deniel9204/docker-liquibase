@@ -1,29 +1,46 @@
 #!/bin/bash
 
-# Need to docker login before run
 
-# temp directory for generated dockerfiles
-mkdir generated
+latest=$( cat latest.txt )
 
-cp docker-entrypoint.sh ./generated/docker-entrypoint.sh
+# Generate each of the tags, build, and push.
+versions=( */ )
+versions=( "${versions[@]%/}" )
+for version in "${versions[@]}"; do
 
-#databases=(postgres mssql mariadb h2 db2 snowflake sybase firebird sqlite sqlite)
-databases=(postgres mysql all)
-files=$(cd ./variables && ls -1 | sed -e 's/\.yml$//')
+    # Exclude templates folder
+    if [ "$version" != "templates" ]; then
+        variants=( $version/*/ )
+        variants=( $(for variant in "${variants[@]%/}"; do
+            echo "$(basename "$variant")"
+        done) )
+        for variant in "${variants[@]}"; do
+        
+            image="deniel92/liquibase"
+			tagAliases=( )
 
-for f in $files
-do
-    for d in "${databases[@]}"
-    do
-        docker run --rm \
-        -v $PWD/templates:/templates \
-        -v $PWD/variables:/variables \
-        dinutac/jinja2docker:2.1.6 /templates/Dockerfile-$d.j2 /variables/$f.yml --format=yaml > ./generated/Dockerfile.$f
+            if [ "$variant" = "all" ]; then
+                tagAliases+=( "$image:$version" )
+            else
+                tagAliases+=( "$image:$version-$variant" )
+            fi
 
-        docker build -f ./generated/Dockerfile.$f -t deniel92/liquibase:$f-$d .
-        docker push deniel92/liquibase:$f-$d
-    done
+            if [ "$version" = "$latest" ] && [ "$variant" = "all" ]; then
+                tagAliases+=( "$image:latest" )
+            fi
+
+            for tagAlias in "${tagAliases[@]}"; do
+                echo "$tagAlias"
+            done
+
+            docker build -f $version/$variant/Dockerfile -t $image:$version-$variant .
+            
+            for tagAlias in "${tagAliases[@]}"; do
+                echo "$tagAlias"
+                docker tag $image:$version-$variant $image:$tagAlias
+                docker push $image:$tagAlias
+            done
+
+        done
+    fi
 done
-
-# clean
-rm -rf generated
