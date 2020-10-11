@@ -21,7 +21,7 @@ ARG LIQUIBASE_VERSION=4.0.0
 
 # Download, verify, extract
 RUN set -x \
-  && wget -O liquibase-${LIQUIBASE_VERSION}.tar.gz "https://github.com/liquibase/liquibase/archive/v${LIQUIBASE_VERSION}.tar.gz" \
+  && wget -O liquibase-${LIQUIBASE_VERSION}.tar.gz "https://github.com/liquibase/liquibase/releases/download/v${LIQUIBASE_VERSION}/liquibase-${LIQUIBASE_VERSION}.tar.gz" \
   && tar -xzf liquibase-${LIQUIBASE_VERSION}.tar.gz
 
 # Setup GPG
