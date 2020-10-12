@@ -1,9 +1,11 @@
 # DO NOT EDIT: created by update.sh from /templates/.dockerfile.j2" > "$dir/Dockerfile"
 FROM openjdk:11-jre-slim-buster
 
-# Install GPG for package vefification
+# Install GPG for package vefification and WGET for file download
 RUN apt-get update \
-	&& apt-get -y install gnupg wget
+	&& apt-get -y install gnupg wget \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 # Add the liquibase user and step in the directory
 RUN addgroup --gid 1001 liquibase
@@ -29,8 +31,8 @@ RUN GNUPGHOME="$(mktemp -d)"
 
 # Download JDBC libraries, verify
 
-RUN wget -O /liquibase/lib/mssql.jar https://repo1.maven.org/maven2/com/microsoft/sqlserver/mssql-jdbc/8.2.2.jre11/mssql-jdbc-8.2.2.jre11.jar \
-	&& wget -O /liquibase/lib/mssql.jar.asc https://repo1.maven.org/maven2/com/microsoft/sqlserver/mssql-jdbc/8.2.2.jre11/mssql-jdbc-8.2.2.jre11.jar.asc \
+RUN wget -O /liquibase/lib/mssql.jar https://repo1.maven.org/maven2/com/microsoft/sqlserver/mssql-jdbc/8.4.1.jre11/mssql-jdbc-8.4.1.jre11.jar \
+	&& wget -O /liquibase/lib/mssql.jar.asc https://repo1.maven.org/maven2/com/microsoft/sqlserver/mssql-jdbc/8.4.1.jre11/mssql-jdbc-8.4.1.jre11.jar.asc \
     && gpg --auto-key-locate keyserver --keyserver ha.pool.sks-keyservers.net \
         --keyserver-options auto-key-retrieve \
         --verify /liquibase/lib/mssql.jar.asc /liquibase/lib/mssql.jar
